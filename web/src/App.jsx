@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { UNKNOWN, MINE, DEFAULTS, LIMITS, emptyBoard } from './constants.js';
+import { UNKNOWN, MINE, DEFAULTS, LIMITS, PRESETS, emptyBoard } from './constants.js';
 import { solveBoard } from './solver.js';
 import Toolbar from './components/Toolbar.jsx';
 import TilePalette from './components/TilePalette.jsx';
@@ -47,14 +47,17 @@ export default function App() {
     setResult(null);
   }, [settings]);
 
-  // Back to how the app opens: blank 5×6, 8 mines, covered tile selected.
+  // Clears the board without touching its size or mine count — those only
+  // change through Create Grid or a preset.
   const reset = useCallback(() => {
-    setSettings({ ...DEFAULTS });
-    setPreset(`${DEFAULTS.rows},${DEFAULTS.cols},${DEFAULTS.mines}`);
-    setBoard({ ...DEFAULTS, grid: emptyBoard(DEFAULTS.rows, DEFAULTS.cols) });
+    const { rows, cols, mines } = board;
+    setBoard((b) => ({ ...b, grid: emptyBoard(b.rows, b.cols) }));
+    setSettings({ rows, cols, mines });
+    const id = `${rows},${cols},${mines}`;
+    setPreset(PRESETS.some((p) => p.id === id) ? id : 'custom');
     setTool(UNKNOWN);
     setResult(null);
-  }, []);
+  }, [board]);
 
   const applyPreset = useCallback((id) => {
     setPreset(id);
