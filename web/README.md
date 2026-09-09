@@ -55,4 +55,4 @@ Exact probabilities, not heuristics:
 Contradictory boards (a number with too many flags, more flags than mines) are reported in plain language
 instead of failing silently. Enumeration is capped at 4M arrangements per component; past that the app says so.
 
-Defaults: 5 × 6 with 8 mines. Presets cover Beginner, Intermediate and Expert.
+Defaults: 6 rows × 5 columns with 8 mines. Presets cover Beginner, Intermediate and Expert.

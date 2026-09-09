@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { UNKNOWN, MINE, DEFAULTS, LIMITS, seedBoard } from './constants.js';
+import { UNKNOWN, MINE, DEFAULTS, LIMITS, emptyBoard } from './constants.js';
 import { solveBoard } from './solver.js';
 import Toolbar from './components/Toolbar.jsx';
 import TilePalette from './components/TilePalette.jsx';
@@ -18,18 +18,10 @@ function normalize(settings) {
 export default function App() {
   const [settings, setSettings] = useState({ ...DEFAULTS });
   const [preset, setPreset] = useState(`${DEFAULTS.rows},${DEFAULTS.cols},${DEFAULTS.mines}`);
-  const [board, setBoard] = useState(() => ({
-    rows: DEFAULTS.rows,
-    cols: DEFAULTS.cols,
-    mines: DEFAULTS.mines,
-    grid: seedBoard(DEFAULTS.rows, DEFAULTS.cols),
-  }));
-  const [tool, setTool] = useState(1);
-  // Solved once on load so the app opens in a working state, then on demand.
-  const [result, setResult] = useState(() => {
-    const start = { rows: DEFAULTS.rows, cols: DEFAULTS.cols, mines: DEFAULTS.mines, grid: seedBoard(DEFAULTS.rows, DEFAULTS.cols) };
-    return solveBoard(start);
-  });
+  // The app opens on a blank board, ready to be painted.
+  const [board, setBoard] = useState(() => ({ ...DEFAULTS, grid: emptyBoard(DEFAULTS.rows, DEFAULTS.cols) }));
+  const [tool, setTool] = useState(UNKNOWN);
+  const [result, setResult] = useState(null);
 
   const solve = useCallback(() => {
     const { rows, cols, mines } = normalize(settings);
@@ -48,19 +40,20 @@ export default function App() {
     setResult(null);
   }, [tool]);
 
-  const createGrid = useCallback((seed = false) => {
+  const createGrid = useCallback(() => {
     const { rows, cols, mines } = normalize(settings);
     setSettings({ rows, cols, mines });
-    setBoard({ rows, cols, mines, grid: seed ? seedBoard(rows, cols) : new Array(rows * cols).fill(UNKNOWN) });
+    setBoard({ rows, cols, mines, grid: emptyBoard(rows, cols) });
     setResult(null);
   }, [settings]);
 
+  // Back to how the app opens: blank 5×6, 8 mines, covered tile selected.
   const reset = useCallback(() => {
     setSettings({ ...DEFAULTS });
     setPreset(`${DEFAULTS.rows},${DEFAULTS.cols},${DEFAULTS.mines}`);
-    const start = { ...DEFAULTS, grid: seedBoard(DEFAULTS.rows, DEFAULTS.cols) };
-    setBoard(start);
-    setResult(solveBoard(start));
+    setBoard({ ...DEFAULTS, grid: emptyBoard(DEFAULTS.rows, DEFAULTS.cols) });
+    setTool(UNKNOWN);
+    setResult(null);
   }, []);
 
   const applyPreset = useCallback((id) => {
@@ -104,7 +97,7 @@ export default function App() {
         preset={preset}
         onSettings={changeSetting}
         onPreset={applyPreset}
-        onCreate={() => createGrid(false)}
+        onCreate={createGrid}
         onReset={reset}
       />
 
@@ -117,6 +110,7 @@ export default function App() {
             Find Safe Moves <span className="kbd">ENTER</span>
           </button>
         </section>
+
 
         <Readout grid={board.grid} cols={board.cols} mines={minesShown} result={result} />
       </div>
