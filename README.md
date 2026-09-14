@@ -1,6 +1,27 @@
 # Solvesweeper
 
-An isometric web Minesweeper solver, plus the Python solver it is built on.
+An isometric Minesweeper solver. Paint the board you're stuck on and every covered square gets its exact mine
+probability — not a heuristic score, the true fraction of valid mine arrangements that put a mine there.
+
+Repo: <https://github.com/JustinPMoran/Solvesweeper>
+
+There are two solvers here that compute the same thing: a browser app in [`web/`](web/), and the original
+Python package in [`minesweeper_solver/`](minesweeper_solver/).
+
+## Web app
+
+```bash
+git clone https://github.com/JustinPMoran/Solvesweeper.git
+cd Solvesweeper/web
+npm install
+npm run dev        # http://localhost:5173
+```
+
+Or just open [`index.html`](index.html) at the repo root — it's the built single-file version
+(`npm run build` → `web/dist/index.html`), no server needed.
+
+Green squares are safe in every valid arrangement, red squares are mines in every one, and amber squares carry
+the highest mine chance on the board. See [`web/README.md`](web/README.md) for the full rundown.
 
 ## Python solver
 
@@ -22,16 +43,19 @@ the corners first.
 
 ![An example of the solver doing its thing.](/examples/example.gif)
 
-## Installation
-The solver can be installed directly from GitHub using the following command:
+### Installation
 
-`pip3 install git+https://github.com/JohnnyDeuss/minesweeper-solver#egg=minesweeper_solver`
+The Python package can be installed directly from this repo:
 
-## Usage
+`pip3 install git+https://github.com/JustinPMoran/Solvesweeper.git#egg=minesweeper_solver`
+
+### Usage
+
 A couple of examples of the solver being used to solve minesweeper games are
 given in the `/examples` directory.
 
-## How it works
+### How it works
+
 This solver uses two approaches in sequence to calculate the exact probability
 that each square contains a mine. The first approach is the very basic counting
 approach, where the number of known mines next to a number is subtracted from
@@ -56,18 +80,11 @@ follows:
   probabilities for the component.
 - Combine the components and again aggregate the model counts and probabilities,
   weighing the probabilities by the model counts.
-  
+
 For more details, please reference the code and the more elaborate explanation in
 the comments of `minesweeper_solver/solver.py`.
 
-## Web solver (Solvesweeper)
+## Credits
 
-An isometric web front end for the solver lives in [`web/`](web/) — a React + Vite app that computes the same
-exact probabilities in the browser.
-
-```bash
-cd web && npm install && npm run dev
-```
-
-`index.html` at the repo root is the built single-file version (`npm run build` → `web/dist/index.html`);
-open it directly in a browser, no server needed. See [`web/README.md`](web/README.md) for details.
+The Python solver is Johnny Deuss's [minesweeper-solver](https://github.com/JohnnyDeuss/minesweeper-solver).
+The web app is a fresh implementation of the same exact-probability approach in JavaScript.

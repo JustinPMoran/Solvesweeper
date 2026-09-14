@@ -1,6 +1,6 @@
-# Isosweeper — web solver
+# Solvesweeper — web app
 
-React + Vite front end for the solver. Paint the board you're stuck on, hit **Find Safe Moves**, and every
+Part of [Solvesweeper](https://github.com/JustinPMoran/Solvesweeper). React + Vite front end for the solver. Paint the board you're stuck on, hit **Find Safe Moves**, and every
 covered square gets its exact mine probability.
 
 ```bash

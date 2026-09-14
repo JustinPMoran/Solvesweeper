@@ -91,7 +91,7 @@ export default function App() {
   return (
     <div className="wrap">
       <header className="masthead">
-        <h1>Isosweeper</h1>
+        <h1>Solvesweeper</h1>
         <p>Paint the board you&apos;re stuck on, then get the exact mine probability for every covered square.</p>
       </header>
 
