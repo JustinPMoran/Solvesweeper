@@ -1,7 +1,7 @@
 # Solvesweeper
 
 An isometric Minesweeper solver. Paint the board you're stuck on and every covered square gets its exact mine
-probability — not a heuristic score, the true fraction of valid mine arrangements that put a mine there.
+probability, not a heuristic score, the true fraction of valid mine arrangements that put a mine there.
 
 Repo: <https://github.com/JustinPMoran/Solvesweeper>
 
